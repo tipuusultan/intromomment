@@ -1,0 +1,177 @@
+{% extends 'base/admin-base.html' %}
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Suggested Influencers</h3>
+
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+
+
+          <table class="table table-striped projects" >
+            <thead>
+                <tr>
+                    <th style="width: 1%">
+                        #
+                    </th>
+                    <th style="width: 20%">
+                      Channel
+                    </th>
+                    <th style="width: 15%">
+                      Number of Videos	
+                    </th>
+                    <th style="width: 10%"  >
+                      Location
+                    </th>
+                    <th style="width: 10%" class="text-center">
+                      Category	
+                    </th>
+                  
+                    <th style="width: 15%">
+                        Subscriber
+                    </th>
+
+                    <th style="width: 15%">
+                        
+                    </th>
+                </tr>
+            </thead>
+  
+  
+              <tbody id="myBody">
+             
+               
+                    
+                <tr id="htable">
+                  <td>
+                    please wait.......
+                  </td>
+                 
+                </tr>
+                
+          
+              
+              </tbody>
+        </table>
+
+
+        </div>
+        
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <form action="" method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="ids" value="{{enquery_id}}">
+ 
+  </form>  
+    
+
+
+
+
+ 
+<script>
+
+    function get_data(){
+      $.ajax({
+              url: "{% url 'admin_section:get_data' %}",
+              type: "POST",
+              data: {
+                  security_code:$("input[name='ids']").val(),
+                  csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+              },
+              
+              success: function (data) {
+                console.log("get_data" , data)
+                response = data.data
+                var count = 1
+                for (var j = 0; j < response.length; j++){
+                        // start here
+                      console.log(j)  
+                      function start_func(){ 
+                                $.ajax({
+                                    url: "{% url 'admin_section:fetch-details' %}",
+                                    type: "POST",
+                                    data: {
+                                        security_code:$("input[name='ids']").val(),
+                                        rows_id:response[j].id,
+                                        csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                                    },
+                                    
+                                    success: function (data) {
+                                        console.log("out of loop",data);
+                                        var table = document.getElementById('myBody')
+                                        if(data.status == "success"){
+                                          response = data.data
+                                          console.log("succes",response)
+                                          
+                                          for (var i = 0; i < response.length; i++){
+                                          
+                                          
+                                          var  row =`
+                                                  <tr>
+                                                        <td>${count}</td>
+                                                        <td><a href='${response[i].URL}'>${response[i].ChannelName}</a?</td>
+                                                        <td>${response[i].TotalVideos}</td>
+                                                        <td> Hong Kong </td>
+                                                        <td>${response[i].Category}</td>
+                                                        <td>${response[i].subscribe}</td>
+                                                        <td class="project-actions text-right">
+                                                          <a class="btn btn-primary btn-sm" href="/youtube-channel/${response[i].Username}">
+                                                              <i class="fas fa-eye">
+                                                              </i>
+                                                              View Channel
+                                                          </a>
+                                                          
+                                                        </td>
+                                                        </tr>
+                                                  `
+                                            table.innerHTML += row
+                                            count++
+                                          }
+                                          $('#htable').hide()     
+                                        }
+                                        else{
+                                            alert(data.status);
+                                        }
+                                    }
+                                });
+                              }
+
+                      // end here
+                      window.addEventListener("load" , start_func())
+
+                    }
+              }
+          });
+    }
+
+         
+            
+      window.addEventListener("load" , get_data())
+
+</script>
+
+
+{% endblock %}

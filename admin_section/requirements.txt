@@ -1,0 +1,7 @@
+insta-scrape==1.4.0
+pafy
+youtube-dl==2020.12.2
+instapy
+emoji==1.7
+django_heroku
+gunicorn

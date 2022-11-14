@@ -1,0 +1,90 @@
+{% extends 'base/base.html' %}
+{% block content %}
+
+
+        
+        <div class="form-login pt-5 pb-5 mt-5">
+            <h2 class="text-center">Join as an Influencer</h2>
+                <form method="POST"  class="row g-3 mt-3" action="">
+                    {% csrf_token %}
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="username" placeholder='Enter a Full Name' required>
+                </div>
+                <div class="col-md-6">
+                    <input  
+                                            type="text" 
+                                            name="email" 
+                                            placeholder="Enter your Email"
+                                            class="form-control"
+                                            hx-post="{% url 'influencer:check-email' %}" 
+                                            hx-target="#Msg" 
+                                            hx-trigger="keyup delay:2s"
+                                            required
+                                    >
+
+                  </div>
+                  
+                <div class="col-md-6">
+                    <input  type="password" placeholder='Enter your Password' class="form-control" name="password1" required >
+                </div>
+                  <div class="col-md-6">
+                    <input type="password" placeholder='Confirm Password'  class="form-control" name="password2" required >
+                  </div>
+                  <div id="Msg"></div>
+                 
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary signup-btn">Create an Account</button>
+                </div>
+                <p class="text-center">Already have an account? <a href={% url 'influencer:login' %}>Login</a></p>
+              </form>
+            </div>
+       
+
+{% comment %} 
+  <!-- JAVASCRIPT START FROM HERE -->
+    <script>
+        $(document).ready(function(){
+            //class on change functionaolity
+            // register start here
+            $("#register_button").click(function (e) { 
+            e.preventDefault();
+                $.ajax({
+                    url: "{% url 'influencer:influencer-register' %}",
+                    type: "POST",
+                    data: {
+                        username:$("input[name='username']").val(),
+                        
+                        email:$("input[name='email']").val(),
+                        otp:$("input[name='otp']").val(),
+                        
+                        password1:$("input[name='password1']").val(),
+                        password2:$("input[name='password2']").val(),
+                        
+                        csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                    },
+                    console.log()
+                    success: function (data) {
+                        console.log(data);
+                        console.log("data");
+                        if(data.status == "success"){
+                            window.location.href = "/";
+                        }
+                        else{
+                            alert(data.status);
+                        }
+                    }
+                });
+    
+    
+            });
+    
+            // register end here
+    
+    
+    
+        });//main end
+        </script>  {% endcomment %}
+
+
+
+{% endblock content %}

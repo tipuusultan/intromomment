@@ -1,0 +1,86 @@
+{% extends 'base/admin-base.html' %}
+{% block content %}
+
+
+
+  <div style='display:flex;' class="container ">
+    <div style="background-color: rgb(243, 249, 255); border: 0.5px solid #9e9e9e; padding: 15px; border-radius: 5px;" class="col-6 m-2">
+      <h4 class="text-center mb-3">Top 20 Most Subscribed YouTubers</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Channel</th>
+            <th scope="col">Uploads</th>
+            <th scope="col">Subs</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for channel in MostSubscribedchannels %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td><a href={{channel.url}}>{{channel.name}}</a></td>
+            <td>{{channel.uploads}}</td>
+            <td>{{channel.subs}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background-color: rgb(243, 249, 255); border: 0.5px solid #9e9e9e; padding: 15px; border-radius: 5px;" class="col-6 m-2">
+      <h4 class="text-center mb-3">Top 20 Most Viewd YouTubers</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Channel</th>
+            <th scope="col">Uploads</th>
+            <th scope="col">Subs</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for channel_view in MostViewedchannels %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td><a href={{channel_view.url}}>{{channel_view.name}}</a></td>
+            <td>{{channel_view.uploads}}</td>
+            <td>{{channel_view.subs}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div style='display:flex;' class="container my-3">
+    <div style="background-color: rgb(243, 249, 255); border: 0.5px solid #9e9e9e; padding: 15px; border-radius: 5px;" class="col-6 m-2">
+      <h4 class="text-center mb-3">Top 20 Most Followed Instaragram Pages</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Posts</th>
+            <th scope="col">Followers</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for page in TopFollowedInstaPages %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td><a href={{page.url}}>{{page.username}}</a></td>
+            <td>{{page.posts}}</td>
+            <td>{{page.followers}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+
+  </div>
+
+{% endblock %}
