@@ -22,7 +22,8 @@ urlpatterns = [
    path('fetch-details' , fetch_details , name="fetch-details"),
    path('get_data' , get_data , name="get_data"),
    path('challen-view/' , challen_view , name="challen-view"),
-   path('get_video' , get_video, name="get_video")
-
+   path('get_video' , get_video, name="get_video"),
+   path('insta-view' , insta_view , name="insta-view"),# update_today = "2022-11-14"
+   path('get_Insta_post' , get_Insta_post , name="get_Insta_post")# update_today = "2022-11-14"
 
 ]

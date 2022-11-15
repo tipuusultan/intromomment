@@ -259,12 +259,49 @@ def get_video(request):
         return JsonResponse({'title':yt.title,'views':yt.views, 'plub_date':publishDate , 'url':VideoLink, 'likes':'Unble to fetch','CommentsCount':CommentsCount})
 
 
+# @login_required(login_url='admin_section:admin-login')
+# def SinglePageInsta(request, id):
+#     import instaloader
+
+#     bot = instaloader.Instaloader()
+
+#     profile = instaloader.Profile.from_username(bot.context, id)
+#     name = profile.full_name
+#     followers = profile.followers
+#     profilePIC = profile.get_profile_pic_url()
+#     Location = 'Hong Kong'
+#     url = f'https://www.instagram.com/{id}'
+#     PostsCount = profile.get_posts().count
+#     PostLinks = profile.get_posts()
+
+#     context = {
+#         'PageURL': url,
+#         'username':id,
+#         'FullName':name,
+#         'FollowersCount':followers,
+#         'profilepic':profilePIC,
+#         'Location':Location,
+#         'PostsCount':PostsCount,        
+#         'Posts':PostLinks,        
+#     }
+#     return render(request , 'dashboard/single-page-insta.html' ,context)
+
+
+
+
+
+# update_today = "2022-11-14"
 @login_required(login_url='admin_section:admin-login')
 def SinglePageInsta(request, id):
+    return render(request , 'dashboard/single-page-insta.html' ,{'id':id})
+
+
+# update_today = "2022-11-14"
+@login_required(login_url='admin_section:admin-login')
+def insta_view(request):
     import instaloader
-
     bot = instaloader.Instaloader()
-
+    id = request.POST.get('security_code')
     profile = instaloader.Profile.from_username(bot.context, id)
     name = profile.full_name
     followers = profile.followers
@@ -272,8 +309,6 @@ def SinglePageInsta(request, id):
     Location = 'Hong Kong'
     url = f'https://www.instagram.com/{id}'
     PostsCount = profile.get_posts().count
-    PostLinks = profile.get_posts()
-
     context = {
         'PageURL': url,
         'username':id,
@@ -281,10 +316,40 @@ def SinglePageInsta(request, id):
         'FollowersCount':followers,
         'profilepic':profilePIC,
         'Location':Location,
-        'PostsCount':PostsCount,        
-        'Posts':PostLinks,        
+        'PostsCount':str(PostsCount),        
+           
     }
-    return render(request , 'dashboard/single-page-insta.html' ,context)
+    return JsonResponse(context)
+
+# update_today = "2022-11-14"
+def get_Insta_post(request):
+    import datetime
+    from django.forms.models import model_to_dict
+
+    print("function called")
+    import instaloader
+    bot = instaloader.Instaloader()
+    id = request.POST.get('security_code')
+    bot.login('de.vilseye', '9707@TIPUsultan')
+    profile = instaloader.Profile.from_username(bot.context, id)
+    PostLinks = profile.get_posts()
+    AllPosts = []
+
+    for post in PostLinks:
+        AllDatas = {
+            'shortcode':post.shortcode,
+            # 'title':post.title,
+            'comments':post.comments,
+            'PublishDate':post.date.strftime("%Y-%m-%d"),
+            'Likes':post.likes
+        }
+        AllPosts.append(AllDatas)
+        
+    context = {    
+        'Post':AllPosts,        
+    }
+    return JsonResponse(context)
+
 
 
 @login_required(login_url='admin_section:admin-login')
